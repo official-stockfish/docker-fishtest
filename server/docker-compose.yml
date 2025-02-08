@@ -1,0 +1,94 @@
+services:
+  # server6543:
+  #   build: .
+  #   command: sh -c "cd /app/fishtest/server && python3 -m pip install -e . && pserve production.ini http_port=6543 host=0.0.0.0"
+  #   ports:
+  #     - "6543:6543"
+  #   volumes:
+  #     - ./fishtest:/app/fishtest
+  #   environment:
+  #     - FISHTEST_HOST=mongodb
+  #   networks:
+  #     - fishtest-network
+
+  # server6544:
+  #   build: .
+  #   command: sh -c "cd /app/fishtest/server && python3 -m pip install -e . && pserve production.ini http_port=6544 host=0.0.0.0"
+  #   ports:
+  #     - "6544:6544"
+  #   volumes:
+  #     - ./fishtest:/app/fishtest
+  #   environment:
+  #     - FISHTEST_HOST=mongodb
+  #   networks:
+  #     - fishtest-network
+
+  # server6545:
+  #   build: .
+  #   command: sh -c "cd /app/fishtest/server && python3 -m pip install -e . && pserve production.ini http_port=6545 host=0.0.0.0"
+  #   ports:
+  #     - "6545:6545"
+  #   volumes:
+  #     - ./fishtest:/app/fishtest
+  #   environment:
+  #     - FISHTEST_HOST=mongodb
+  #   networks:
+  #     - fishtest-network
+
+  development:
+    build: .
+    command: sh -c "cd /app/fishtest/server && python3 -m pip install -e . && pserve development.ini --reload"
+    ports:
+      - "6542:6542"
+    volumes:
+      - ./fishtest:/app/fishtest
+    environment:
+      - FISHTEST_HOST=mongodb
+    networks:
+      - fishtest-network
+
+  nginx:
+    build: .
+    command: nginx -g 'daemon off;'
+    ports:
+      - "80:80"
+    volumes:
+      - ./fishtest:/app/fishtest
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./fishtest.conf:/etc/nginx/sites-available/fishtest.conf:ro
+    depends_on:
+      # - server6543
+      # - server6544
+      # - server6545
+      - development
+    networks:
+      - fishtest-network
+
+  mongodb:
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    command: mongod --wiredTigerCacheSizeGB 2.0
+    networks:
+      - fishtest-network
+
+  setup:
+    build: .
+    command: sh -c "cd /app/fishtest/server && python3 -m pip install -e . && python3 utils/create_indexes.py actions flag_cache pgns runs users && ls -la && python3 /app/create_users.py"
+    volumes:
+      - ./fishtest:/app/fishtest
+    environment:
+      - FISHTEST_HOST=mongodb
+    depends_on:
+      - mongodb
+    networks:
+      - fishtest-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  fishtest-network:
+    driver: bridge
