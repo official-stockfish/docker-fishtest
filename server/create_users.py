@@ -1,9 +1,15 @@
 from fishtest.rundb import RunDb
+
 rdb = RunDb()
 for i in range(2):
     user_name = f"user{i:02d}"
     user_mail = f"{user_name}@example.org"
     user_repo = "https://github.com/official-stockfish/Stockfish"
+
+    # skip if user already exists
+    if rdb.userdb.get_user(user_name) is not None:
+        continue
+
     rdb.userdb.create_user(user_name, user_name, user_mail, user_repo)
     if i == 0:
         rdb.userdb.add_user_group(user_name, "group:approvers")
