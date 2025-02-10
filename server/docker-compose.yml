@@ -35,18 +35,6 @@ services:
   #   networks:
   #     - fishtest-network
 
-  development:
-    build: .
-    command: sh -c "cd /app/fishtest/server && python3 -m pip install -e . && pserve development.ini --reload"
-    ports:
-      - "6542:6542"
-    volumes:
-      - ./fishtest:/app/fishtest
-    environment:
-      - FISHTEST_HOST=mongodb
-    networks:
-      - fishtest-network
-
   nginx:
     build: .
     command: nginx -g 'daemon off;'
@@ -74,9 +62,14 @@ services:
     networks:
       - fishtest-network
 
-  setup:
+  development:
     build: .
-    command: sh -c "cd /app/fishtest/server && python3 -m pip install -e . && python3 utils/create_indexes.py actions flag_cache pgns runs users && ls -la && python3 /app/create_users.py"
+    command:
+      - /bin/sh
+      - "-c"
+      - "/app/entrypoint.sh"
+    ports:
+      - "6542:6542"
     volumes:
       - ./fishtest:/app/fishtest
     environment:
