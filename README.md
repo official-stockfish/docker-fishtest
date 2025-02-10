@@ -10,6 +10,9 @@ git clone https://github.com/official-stockfish/fishtest
 docker compose up -d
 ```
 
+Copy `.netrc.example` to `.netrc` and update the "login" token with your GitHub personal access token
+to increase the rate limit.
+
 ## Worker
 
 ```
