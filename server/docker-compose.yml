@@ -1,40 +1,4 @@
 services:
-  # server6543:
-  #   build: .
-  #   command: sh -c "cd /app/fishtest/server && python3 -m pip install -e . && pserve production.ini http_port=6543 host=0.0.0.0"
-  #   ports:
-  #     - "6543:6543"
-  #   volumes:
-  #     - ./fishtest:/app/fishtest
-  #   environment:
-  #     - FISHTEST_HOST=mongodb
-  #   networks:
-  #     - fishtest-network
-
-  # server6544:
-  #   build: .
-  #   command: sh -c "cd /app/fishtest/server && python3 -m pip install -e . && pserve production.ini http_port=6544 host=0.0.0.0"
-  #   ports:
-  #     - "6544:6544"
-  #   volumes:
-  #     - ./fishtest:/app/fishtest
-  #   environment:
-  #     - FISHTEST_HOST=mongodb
-  #   networks:
-  #     - fishtest-network
-
-  # server6545:
-  #   build: .
-  #   command: sh -c "cd /app/fishtest/server && python3 -m pip install -e . && pserve production.ini http_port=6545 host=0.0.0.0"
-  #   ports:
-  #     - "6545:6545"
-  #   volumes:
-  #     - ./fishtest:/app/fishtest
-  #   environment:
-  #     - FISHTEST_HOST=mongodb
-  #   networks:
-  #     - fishtest-network
-
   nginx:
     build: .
     command: nginx -g 'daemon off;'
@@ -72,12 +36,17 @@ services:
       - "6542:6542"
     volumes:
       - ./fishtest:/app/fishtest
+
     environment:
-      - FISHTEST_HOST=mongodb
+      - FISHTEST_URL=http://127.0.0.1
+      - FISHTEST_CAPTCHA_SECRET=your-secret-key-here # dev usage only
+      - FISHTEST_NN_URL=http://127.0.0.1
     depends_on:
       - mongodb
     networks:
       - fishtest-network
+    extra_hosts:
+      - "localhost:172.17.0.1"
 
 volumes:
   mongodb_data:

@@ -28,12 +28,6 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY fishtest.conf /etc/nginx/sites-available/
 RUN ln -sf /etc/nginx/sites-available/fishtest.conf /etc/nginx/sites-enabled/fishtest.conf
 
-# Create required secret files
-RUN echo "your-secret-key-here" > /root/fishtest.secret \
-    && echo "your-captcha-secret-here" > /root/fishtest.captcha.secret \
-    && chmod 600 /root/fishtest.secret /root/fishtest.captcha.secret
-
-
 # Set up working directory
 WORKDIR $APP_DIR
 
