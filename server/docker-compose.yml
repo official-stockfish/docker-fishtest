@@ -10,12 +10,16 @@ services:
       - ./fishtest.conf:/etc/nginx/sites-available/fishtest.conf:ro
       - ./.netrc:/root/.netrc
     depends_on:
-      # - server6543
-      # - server6544
-      # - server6545
-      - development
+      development:
+        condition: service_healthy
     networks:
       - fishtest-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   mongodb:
     image: mongo:7.0
@@ -37,18 +41,23 @@ services:
       - "6542:6542"
     volumes:
       - ./fishtest:/app/fishtest
-
     environment:
       - FISHTEST_URL=http://127.0.0.1
       - FISHTEST_CAPTCHA_SECRET= # dev usage only
       - FISHTEST_NN_URL=https://tests.stockfishchess.org/
-
+      - FISHTEST_INSECURE_DEV=1
     depends_on:
       - mongodb
     networks:
       - fishtest-network
     extra_hosts:
       - "localhost:172.17.0.1"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6542/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
 volumes:
   mongodb_data:

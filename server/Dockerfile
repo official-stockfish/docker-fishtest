@@ -42,10 +42,10 @@ RUN --mount=type=cache,target=/home/$USERNAME/.cache/uv,uid=$USER_UID \
     --mount=type=bind,source=./fishtest/pyproject.toml,target=pyproject.toml \
     uv sync --frozen --no-install-project --no-dev
 
-ADD --chown=$USERNAME:$USERNAME ./fishtest $APP_DIR
+COPY --chown=$USERNAME:$USERNAME fishtest/uv.lock fishtest/pyproject.toml $APP_DIR/
 
 RUN --mount=type=cache,target=/home/$USERNAME/.cache/uv,uid=$USER_UID \
-    uv sync --frozen --no-dev
+    uv sync --frozen --no-install-project
 
 COPY --chown=$USERNAME:$USERNAME create_users.py /app/create_users.py
 COPY --chown=$USERNAME:$USERNAME .netrc /home/$USERNAME/.netrc
