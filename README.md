@@ -25,6 +25,12 @@ To start a worker, run:
 docker compose up -d
 ```
 
+If you want to build the image yourself run the following
+
+```
+docker compose -f compose.yml -f compose.build.yml up -d --build
+```
+
 ## Server (for development)
 
 To start a dev server, run:
