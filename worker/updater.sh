@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -euo pipefail
 
@@ -7,19 +7,14 @@ UPDATE_INTERVAL_SECONDS=43200
 run_update() {
     local signal_workers=${1:-1}
 
-    if ! update_output=$(pacman -Syu --noconfirm 2>&1); then
+    if ! update_output=$(apk upgrade --available 2>&1); then
         printf '%s\n' "$update_output"
         return 1
     fi
 
     printf '%s\n' "$update_output"
 
-    if [[ "$update_output" == *") installing gcc "* ||
-          "$update_output" == *") upgrading gcc "* ||
-          "$update_output" == *") reinstalling gcc "* ||
-          "$update_output" == *") installing python "* ||
-          "$update_output" == *") upgrading python "* ||
-          "$update_output" == *") reinstalling python "* ]]; then
+    if echo "$update_output" | grep -Eiq '^(Upgrading|Installing|Reinstalling) (gcc|python3)( |-)'; then
         if [ "$signal_workers" -eq 0 ]; then
             echo "gcc/python changed during startup update"
             return 0
@@ -47,7 +42,6 @@ fi
 while true; do
     if run_update; then
         sleep "$UPDATE_INTERVAL_SECONDS"
-        continue
     else
         update_status=$?
 
