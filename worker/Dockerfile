@@ -9,6 +9,7 @@ RUN apk update && apk add --no-cache \
     py3-pip \
     make \
     gcc \
+    g++ \
     musl-dev \
     curl \
     wget \
