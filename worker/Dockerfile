@@ -21,6 +21,21 @@ RUN apk update && apk add --no-cache \
 COPY updater.sh /updater.sh
 RUN chmod +x /updater.sh
 
+# install gosu for the current architecture
+ENV GOSU_VERSION=1.19
+
+RUN set -eux; \
+    arch="$(apk --print-arch)"; \
+    case "$arch" in \
+        x86_64) gosu_arch='amd64' ;; \
+        aarch64) gosu_arch='arm64' ;; \
+        *) echo "unsupported architecture: $arch"; exit 1 ;; \
+    esac; \
+    curl -Lo /usr/local/bin/gosu \
+      "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${gosu_arch}"; \
+    chmod +x /usr/local/bin/gosu; \
+    gosu nobody true
+
 # make worker user
 RUN useradd -m -s /bin/bash worker
 
