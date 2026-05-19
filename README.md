@@ -17,7 +17,7 @@ cd worker
 cp .env.example .env
 ```
 
-Update the `.env` file with your credentials
+Update the `.env` file with your credentials and `NUMBER_OF_CORES` to the desired concurrency, NUM_WORKERS should probably be left untouched.
 
 To start a worker, run:
 
