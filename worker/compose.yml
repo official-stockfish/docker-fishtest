@@ -1,8 +1,7 @@
 services:
   fishtest-worker:
+    image: ghcr.io/official-stockfish/fishtest-worker:latest
     restart: always
-    build:
-      dockerfile: ./Dockerfile
     stop_grace_period: 1m30s
     container_name: fishtest-worker
     stdin_open: true # docker run -i
