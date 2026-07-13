@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - "worker/**"
-      - ".github/workflows/docker-worker.yml"
+      - ".github/workflows/worker-image.yml"
   workflow_dispatch:
 
 permissions:
