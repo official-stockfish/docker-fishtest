@@ -15,8 +15,7 @@ RUN apk update && apk add --no-cache \
     wget \
     clang \
     llvm \
-    shadow \
-    su-exec
+    shadow
 
 # updater stays as root
 COPY updater.sh /updater.sh
