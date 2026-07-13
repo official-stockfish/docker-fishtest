@@ -15,8 +15,7 @@ RUN apk update && apk add --no-cache \
     wget \
     clang \
     llvm \
-    shadow \
-    su-exec
+    shadow
 
 # updater stays as root
 COPY updater.sh /updater.sh
@@ -49,7 +48,7 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENV NUM_WORKERS=""
-ENV WORKER_CONFIG=""
+ENV WORKER_ARGS=""
 
 # run updater in background and then start your workers
 ENTRYPOINT ["/entrypoint.sh"]
