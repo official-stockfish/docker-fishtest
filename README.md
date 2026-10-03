@@ -9,8 +9,8 @@ The container also runs one update check before starting the workers.
 The update check runs every 12 hours.
 
 When the updater changes the `gcc` or `python3` package, it creates `fish.exit` in each worker directory.
-This lets the workers finish their current batch of games and exit cleanly before Docker
-starts them again, so the next startup sees fresh compiler metadata.
+This lets the workers exit cleanly, before Docker
+starts them again, now with the new package metadata.
 
 By default, the worker pulls a pre-built image from GitHub Container Registry.
 
@@ -31,6 +31,26 @@ If you want to build the image yourself run the following
 
 ```
 docker compose -f compose.yml -f compose.build.yml up -d --build
+```
+
+### Managing the worker
+
+To follow the live worker logs:
+```
+docker compose logs -f
+```
+
+To stop the worker and resume later:
+```
+docker compose stop
+```
+```
+docker compose start
+```
+
+To terminate the worker completely and remove the container:
+```
+docker compose down
 ```
 
 ## Server (for development)
