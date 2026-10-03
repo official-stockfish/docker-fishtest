@@ -16,10 +16,10 @@ By default, the worker pulls a pre-built image from GitHub Container Registry.
 
 ```
 cd worker
-cp .env.example .env
+cp fishtest.cfg.example fishtest.cfg
 ```
 
-Update the `.env` file with your credentials and `NUMBER_OF_CORES` to the desired concurrency, NUM_WORKERS should probably be left untouched.
+Update the `fishtest.cfg` file with your credentials and `NUMBER_OF_CORES` to the desired concurrency. If you want to run more than a single worker, copy `.env.example` to `.env` and edit NUM_WORKERS appropriately.
 
 To start a worker, run:
 

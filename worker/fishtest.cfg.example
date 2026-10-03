@@ -1,0 +1,6 @@
+[login]
+username = YOUR_USERNAME 
+password = YOUR_PASSWORD
+
+[parameters]
+concurrency = NUMBER_OF_CORES

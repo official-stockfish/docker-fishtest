@@ -9,4 +9,5 @@ services:
     shm_size: '1gb'  # for shared network
     environment:
       - NUM_WORKERS
-      - WORKER_ARGS
+    volumes:
+      - ./fishtest.cfg:/home/worker/fishtest.cfg:ro
